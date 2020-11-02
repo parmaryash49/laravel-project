@@ -1,0 +1,69 @@
+<script>
+HTMLElement.prototype.hasClass = function(c){
+    return this.className.split(" ").indexOf(c) > -1
+}
+function ChangeSubcategory(data)
+{
+    var mainElement = document.getElementById('mainCatValue');
+    var subCatElement = document.getElementById('subCatValue');
+ 
+    for (item of subCatElement.children)
+    {
+        var available = item.hasClass('Cat_'+ mainElement.value +'_check');
+
+        if(available)
+        {
+            item.style.display = "block";
+        }
+        else
+        {
+            item.style.display = "none";
+        }
+    }
+}
+
+</script>
+ <select required placeholder="Select" id="mainCatValue" onChange="ChangeSubcategory()"  name="categoryId" class="form-control input-style" value="0" >
+                            <option style="color:gray;" value="" disabled selected>Category...</option>
+                            @foreach($category as $cat)
+                                <option value="{{$cat->id}}">{{$cat->categryName}}</option> 
+                            @endforeach
+                            </select>
+                            </div>
+                    
+                            <div class="col-sm-6">
+        <select required placeholder="Select" id="subCatValue"  name="subCategoryId" class="form-control input-style" value="0" >
+                            <option style="color:gray;" value="" disabled selected>Sub Category...</option>
+                            @foreach($subCategories as $subcat)
+                                <option class="Cat_{{$subcat->categoryId}}_check" value="{{$subcat->id}}">{{$subcat->subCategryName}}</option> 
+                            @endforeach
+                            </select>
+
+
+ $email = $inputes['email'];
+            $password = $inputes['password'];
+            
+            $isAvailable = UserData::where('email',$email)->where('password',$password)->count();
+
+            if($isAvailable > 0)
+            {
+                $user = UserData::where('email',$email)->where('password',$password)->first();
+         
+                Session::put('id', $user->id);
+                Session::put('firstName', $user->firstName);
+                Session::put('lastName', $user->lastName);
+                Session::put('email', $user->email);
+                Session::put('userType', $user->userType);
+                Session::put('contactNo', $user->contactNo);
+
+                $cartCount = Cart::where('userId',$user->id)->count();
+
+                Session::put('cartCount',$cartCount);
+          
+               return redirect('/');
+            }
+            else
+            {
+                //echo "<script language='javascript'>alert('UserName Or Password incorrect!!!');</script>";
+                return redirect('/login')->with('alert', 'UserName Or Password incorrect!!!');
+            }

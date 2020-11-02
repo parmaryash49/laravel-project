@@ -1,0 +1,25 @@
+ public function createAddress(Request $request)
+    {
+        $inputes = $request->input();
+        try
+        {
+            $data = new Address();
+            $data->userId =session::get('id');
+            $data->name = $inputes['name'];
+            $data->city = $inputes['city'];
+            $data->state = $inputes['state'];
+            $data->addressLine1 = $inputes['address1'];
+            $data->addressLine2 = $inputes['address2'];
+            $data->zipCode = $inputes['zipcode'];
+            $data->contactNo = $inputes['contactNo'];
+            $data->save();
+        }
+        catch(Exception $e)
+        {
+
+        }
+
+        return redirect('/addressManage');
+    }
+
+
